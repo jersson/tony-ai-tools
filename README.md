@@ -101,6 +101,7 @@ The installer:
 
 1. Finds the nearest `opencode.json` (or `.jsonc`), walking up from the current directory — creates one when none exists, and converts an existing `.jsonc` to `.json`.
 2. Registers the plugin path in the config's `plugin` array (no-op if already present).
+3. Scaffolds `.tony/raw-documents/` in the project (idempotent) — the canonical drop point for source documents used by `/tony build-knowledge`.
 
 Restart OpenCode afterwards — plugins are loaded at startup.
 
@@ -121,6 +122,7 @@ The installer:
 1. Ensures `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` exist in the package — created if missing; an existing `marketplace.json` gets the tony entry merged in without touching other entries.
 2. Registers the package directory as a plugin marketplace and installs `tony@tony-ai-tools` through the `claude` CLI.
 3. Removes any legacy `.claude/skills/tony` install left by older versions (only after the plugin install succeeds).
+4. Repository-level installs also scaffold `.tony/raw-documents/` in the project — skipped for `--global`, which is not tied to a project.
 
 Restart Claude Code afterwards (exit and run `claude` again) — plugins are discovered at startup.
 

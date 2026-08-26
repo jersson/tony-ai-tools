@@ -38,7 +38,7 @@ Resolve sources in this order:
 
 1. If `<project_root>/.tony/raw-documents/` exists and has files → use it.
 2. Otherwise accept file paths, folder paths, or URLs given by the developer; copy/move loose files into `.tony/raw-documents/` first.
-3. If nothing is available, create `.tony/raw-documents/` if missing and stop until answered.
+3. If nothing is available — the folder is missing **or empty** and nothing was given — do not run any pipeline step. Create `.tony/raw-documents/` if missing, apply the announcement below, and stop until documents appear or paths are provided.
 
 **First-time announcement:** whenever you create `.tony/raw-documents/`, say so explicitly: *"Created `.tony/raw-documents/` — that is tony's canonical drop point. Put source documents there and re-run `/tony build-knowledge`."*
 
