@@ -1,0 +1,44 @@
+{
+  "name": "@my-tony/ai-tools",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Skill library to turn ideas into epics and user stories (INVEST + 3C)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    ".claude-plugin/",
+    "skills/",
+    "lib/",
+    "tools/",
+    "plugin.mjs",
+    "cli.mjs",
+    "banner.txt",
+    "LICENSE"
+  ],
+  "bin": {
+    "tony": "cli.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jersson/tony-ai-tools.git"
+  },
+  "keywords": [
+    "opencode",
+    "skill",
+    "explore-idea",
+    "build-knowledge",
+    "create-epic",
+    "create-user-story",
+    "tony-ai-tools",
+    "invest",
+    "3cs",
+    "epics",
+    "knowledge-base",
+    "vector-search"
+  ]
+}

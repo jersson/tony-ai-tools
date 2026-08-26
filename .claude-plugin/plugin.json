@@ -1,0 +1,8 @@
+{
+  "name": "tony",
+  "description": "Idea-driven product workflows — epics and user stories",
+  "version": "0.1.0",
+  "skills": [
+    "./skills"
+  ]
+}

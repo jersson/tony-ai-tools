@@ -1,0 +1,13 @@
+{
+  "name": "tony-ai-tools",
+  "owner": {
+    "name": "Jersson"
+  },
+  "plugins": [
+    {
+      "name": "tony",
+      "source": "./",
+      "description": "Idea-driven product workflows — epics and user stories"
+    }
+  ]
+}
