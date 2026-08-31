@@ -27,13 +27,14 @@ Every generated story must pass all of the following before it is written to dis
 - [ ] The "what" (action) is a single, focused capability
 - [ ] The "why" (benefit) justifies the effort
 - [ ] All acceptance criteria are objectively pass/fail
-- [ ] No hidden assumptions or implicit requirements
+- [ ] Every claim is either cited to the knowledge base or listed under **Assumptions** and labeled as such
+- [ ] Citations in Notes / Context map to real knowledge-base entries
 - [ ] Dependencies are identified and externalized
 
 ## Decision rule
 
 | If the story is… | Then… |
 |------------------|--------|
-| Passing all checks | Write it to `docs/user-stories/` |
+| Passing all checks | Write it to `docs/user-stories/<epic-name>/` |
 | Failing 1–2 checks but fixable | Refine and re-validate before writing |
 | Structurally invalid (not independent, not small, no clear value) | Exclude it; report why and suggest a split or an epic |

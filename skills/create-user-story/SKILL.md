@@ -95,7 +95,15 @@ A story may only be written when its status is **consistent & doable**. If a sto
 
 ### 8. Write the story files
 
-Write each validated story to `<project_root>/docs/user-stories/<kebab-name>.md` (e.g., `referral-share-link.md`). Create the folder if needed. Never overwrite an existing file without explicit confirmation.
+Stories are grouped in one folder per epic — the epic used as the base names the folder:
+
+| Base | Target folder |
+|------|---------------|
+| An epic (path or matched name) | `<project_root>/docs/user-stories/<epic-name>/` — `<epic-name>` is the epic file's kebab name (`docs/epics/referral-program.md` → `referral-program`) |
+| A raw idea with a related epic found in `docs/epics/` | Same rule, using that epic's name |
+| A raw idea with no related epic | `<project_root>/docs/user-stories/<idea-kebab-name>/`; note in the report that stories are grouped by idea until linked to an epic |
+
+Write each validated story to `<target-folder>/<story-kebab-name>.md` (e.g., `docs/user-stories/referral-program/referral-share-link.md`). Create folders as needed. Never overwrite an existing file without explicit confirmation.
 
 ### 9. Persist generation result
 

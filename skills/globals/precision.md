@@ -39,7 +39,7 @@
 
 Before writing artifacts:
 - Idea understood: problem, actors, outcome
-- Output directory exists or will be created (`docs/epics/`, `docs/user-stories/`)
+- Output directory exists or will be created (`docs/epics/`, `docs/user-stories/<epic-name>/`)
 - Kebab-case naming applied
 
 After writing:
