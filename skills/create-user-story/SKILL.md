@@ -1,13 +1,14 @@
 ---
 name: create-user-story
-description: Understand an idea (or an existing epic) and draft user stories that pass INVEST + 3C validation, grounded in the project knowledge base when one is loaded. Each story is self-checked against the checklist and correctness criteria before being written to docs/user-stories/.
+persona: po
+description: Understand an idea (or an existing epic) and draft user stories that pass INVEST + 3C validation, grounded in the loaded project knowledge base. Each story is self-checked against the checklist and correctness criteria before being written to docs/user-stories/<epic-name>/.
 ---
 
 # Create User Story Skill
 
-When this skill is loaded, you help the developer turn an idea (or an epic) into **user stories**. Every generated story must pass the INVEST + 3C validation rules before it is written to disk — a story that would fail `/tony` review does not leave this skill.
+When this skill is loaded, you help the PO turn an idea (or an epic) into **user stories**. Every generated story must pass the INVEST + 3C validation rules before it is written to disk — a story that would fail `/tony` review does not leave this skill.
 
-> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`). Quote whichever form matches the developer's environment.
+> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`). Quote whichever form matches the PO's environment.
 
 ## Pre-condition
 
@@ -15,11 +16,27 @@ When this skill is loaded, you help the developer turn an idea (or an epic) into
 
 Read `../globals/INDEX.md` and load every principle file it lists into session context. Nothing else in this skill runs until that is done.
 
+### 2. Load the PO personality
+
+Apply the PO personality following `../globals/personality.md`:
+
+- If `<project_root>/.tony/personality.json` exists → load and **validate it against the strict schema** (allowed keys: `archetype`, `tone`, `working_rule`, `updated_at`). If it has an unmapped key, a missing required field, or an invalid archetype, **throw a processing error** naming the problem and stop — never proceed with an unparseable config.
+- If it is missing → run the capture flow (one compact pass), save to `<project_root>/.tony/personality.json`, then continue.
+
+### 3. Verify the evidence dependency (hard gate)
+
+`build-knowledge` is a hard prerequisite — this skill cannot produce grounded stories without it.
+
+- If `<project_root>/.tony/knowledge-base.md` exists → proceed.
+- If it is missing → do not run this skill. Tell the PO: *"Shaping requires a knowledge base. Run `/tony build-knowledge` first — drop source documents in `.tony/raw-documents/`."* Stop.
+
 ## Workflow
 
 ### 1. Determine intent
 
-If the developer wants to shape a broad idea into epics first, do not proceed here. Tell them to use `/tony create-epic` for that and stop.
+If the PO wants to shape a broad idea into epics first, do not proceed here. Tell them to use `/tony create-epic` for that and stop.
+
+If the request is not about breaking an idea (or epic) into stories (coding, debugging, general Q&A, or anything else) it is outside tony's scope — refuse per the safety protocol and stop.
 
 If they want user stories from an idea or an epic, proceed.
 
@@ -46,12 +63,12 @@ Extract during analysis:
 
 If essential context is missing, ask **one** focused clarifying question at a time.
 
-### 4. Check the knowledge base
+### 4. Use the knowledge base
 
-Check whether `<project_root>/.tony/knowledge-base.md` exists (use `ls` or `test -f`). If it does, read it and use it two ways:
+The gate in the pre-conditions guarantees `.tony/knowledge-base.md` exists. Read it and use it two ways:
 
-- **Support:** ground story details in cited claims — personas for the roles, baselines and targets for acceptance-criteria thresholds (e.g., a documented "links valid 12 months" decision becomes a testable criterion). Copy citations into the story's Notes / Context.
-- **Push back:** when a drafted story contradicts the baseline — a constraint it violates, a metric it undermines, a conflict already recorded — flag it with both citations before writing. The developer decides whether to adjust the story or override the baseline; never silently write a story that contradicts the knowledge base.
+- **Support:** ground story details in cited claims — personas for the roles, baselines and targets for acceptance-criteria thresholds (e.g., a documented "links valid 12 months" decision becomes a testable criterion). Copy citations into the story's Notes / Context. Any claim that cannot be traced to the knowledge base must be listed under the story's **Assumptions** section and labeled as an assumption — never presented as fact (checklist: every claim is cited or an assumption).
+- **Push back:** when a drafted story contradicts the baseline — a constraint it violates, a metric it undermines, a conflict already recorded — flag it with both citations before writing. The PO decides whether to adjust the story or override the baseline; never silently write a story that contradicts the knowledge base.
 
 **Deep evidence lookup (optional):** if `.tony/index/kb.db` exists and acceptance criteria need thresholds or details not in the distilled claims, run a semantic search over the full corpus:
 
@@ -59,9 +76,7 @@ Check whether `<project_root>/.tony/knowledge-base.md` exists (use `ls` or `test
 python3 <package_root>/tools/vector_index.py search .tony/index/kb.db "<query>" 5
 ```
 
-Cite what it returns; fall back to TF-IDF (`tools/index.py search`) when the vector index is unavailable.
-
-If no knowledge base exists, continue without it and note in the report that details are unverified.
+Cite what it returns; fall back to TF-IDF (`<package_root>/tools/index.py search`) when the vector index is unavailable.
 
 ### 5. Identify candidate stories
 
@@ -129,10 +144,11 @@ Structure your response following the loaded global guidelines:
 
 **Validation summary:** per story, any INVEST/3C weaknesses that were fixed during iteration.
 
-**Baseline:** how the knowledge base grounded the stories (cited claims), any pushback raised and its resolution — or "no knowledge base loaded; details unverified".
+**Baseline:** how the knowledge base grounded the stories (cited claims), and any pushback raised and its resolution — the evidence gate guarantees a loaded baseline.
 
 **Excluded candidates:** candidates that failed validation and why (if any).
 
 **Open questions:** unresolved items from the Conversation element.
 
+Apply the loaded PO personality when framing stories (conversation detail, acceptance-criteria emphasis), phrasing pushback against the knowledge base, and reporting the outcome — use the archetype's fingerprint in `../globals/personality.md` (Artifact fingerprints).
 Apply the loaded operating principles to every step of this workflow.
