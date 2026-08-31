@@ -371,13 +371,19 @@ def main():
             sys.exit(1)
         result = build_index(sys.argv[2], sys.argv[3])
         print(json.dumps(result, indent=2))
+        if 'error' in result:
+            sys.exit(1)
     
     elif command == 'search':
         if len(sys.argv) < 4:
-            print("Usage: python vector_index.py search <db_path> <query>", file=sys.stderr)
+            print("Usage: python vector_index.py search <db_path> <query> [k]", file=sys.stderr)
             sys.exit(1)
         top_k = int(sys.argv[4]) if len(sys.argv) > 4 else 5
-        results = search_index(sys.argv[2], ' '.join(sys.argv[3:]), top_k)
+        query = ' '.join(sys.argv[3:4]) if len(sys.argv) > 4 else ' '.join(sys.argv[3:])
+        results = search_index(sys.argv[2], query, top_k)
+        if len(results) == 1 and 'error' in results[0]:
+            print(json.dumps(results, indent=2), file=sys.stderr)
+            sys.exit(1)
         print(json.dumps(results, indent=2))    
     elif command == 'update':
         if len(sys.argv) < 4:
@@ -385,6 +391,8 @@ def main():
             sys.exit(1)
         result = update_index(sys.argv[2], sys.argv[3])
         print(json.dumps(result, indent=2))
+        if 'error' in result:
+            sys.exit(1)
     
     else:
         print(f"Error: Unknown command '{command}'", file=sys.stderr)

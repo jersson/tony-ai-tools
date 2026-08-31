@@ -47,11 +47,6 @@ def check_load_quality(md_dir: str, threshold: float = DEFAULT_THRESHOLD) -> dic
         return report
     
     for md_file in md_files:
-        # Skip manifest and report files
-        if md_file.name in ['manifest.json', 'load-report.md', 'build-report.md']:
-            report['total_files'] -= 1
-            continue
-        
         try:
             content = md_file.read_text(encoding='utf-8')
             
@@ -74,13 +69,24 @@ def check_load_quality(md_dir: str, threshold: float = DEFAULT_THRESHOLD) -> dic
                 report['issues'].append(f'{md_file.name}: Invalid YAML frontmatter')
                 continue
             
+            frontmatter = content[3:end_idx]
+            
+            # Check converted-file frontmatter keys (written by convert.py)
+            missing_keys = [k for k in ('source_file', 'original_format', 'date_loaded', 'checksum')
+                            if f'{k}:' not in frontmatter]
+            if missing_keys:
+                report['invalid_files'] += 1
+                report['issues'].append(
+                    f'{md_file.name}: Missing frontmatter keys: {", ".join(missing_keys)}')
+                continue
+            
             report['valid_files'] += 1
             
         except Exception as e:
             report['invalid_files'] += 1
             report['issues'].append(f'{md_file.name}: {str(e)}')
     
-    # Calculate success rate (exclude manifest/report from count)
+    # Calculate success rate (manifest.json is JSON — only *.md files are counted)
     actual_files = report['total_files']
     if actual_files > 0:
         report['success_rate'] = (report['valid_files'] / actual_files) * 100
@@ -155,6 +161,12 @@ def check_build_quality(kb_dir: str, threshold: float = DEFAULT_THRESHOLD) -> di
             if 'tags:' not in frontmatter:
                 report['invalid_pages'] += 1
                 report['issues'].append(f'{wiki_file.name}: Missing tags in frontmatter')
+                continue
+            
+            # Check for source
+            if 'source:' not in frontmatter:
+                report['invalid_pages'] += 1
+                report['issues'].append(f'{wiki_file.name}: Missing source in frontmatter')
                 continue
             
             # Check for wiki links

@@ -7,7 +7,7 @@ Supports full rebuild and incremental update modes.
 
 Usage:
     python index.py build <wiki_dir> <index_dir>      # Build index
-    python index.py search <index_dir> <query>        # Search index
+    python index.py search <index_dir> <query> [k]  # Search index
     python index.py update <wiki_dir> <index_dir>     # Update index
 """
 
@@ -319,7 +319,7 @@ def main():
         print("Usage: python index.py <command> <args>")
         print("Commands:")
         print("  build <wiki_dir> <index_dir>  - Build index")
-        print("  search <index_dir> <query>    - Search index")
+        print("  search <index_dir> <query> [k] - Search index")
         print("  update <wiki_dir> <index_dir> - Update index")
         sys.exit(1)
     
@@ -335,16 +335,22 @@ def main():
         
         result = build_index(wiki_dir, index_dir)
         print(json.dumps(result, indent=2))
+        if 'error' in result:
+            sys.exit(1)
     
     elif command == 'search':
         if len(sys.argv) < 4:
-            print("Usage: python index.py search <index_dir> <query>", file=sys.stderr)
+            print("Usage: python index.py search <index_dir> <query> [k]", file=sys.stderr)
             sys.exit(1)
         
         index_dir = sys.argv[2]
-        query = ' '.join(sys.argv[3:])
-        
-        results = search_index(index_dir, query)
+        top_k = int(sys.argv[4]) if len(sys.argv) > 4 else 5
+        query = ' '.join(sys.argv[3:4]) if len(sys.argv) > 4 else ' '.join(sys.argv[3:])
+
+        results = search_index(index_dir, query, top_k)
+        if len(results) == 1 and 'error' in results[0]:
+            print(json.dumps(results, indent=2), file=sys.stderr)
+            sys.exit(1)
         print(json.dumps(results, indent=2))
     
     elif command == 'update':
@@ -357,6 +363,8 @@ def main():
         
         result = update_index(wiki_dir, index_dir)
         print(json.dumps(result, indent=2))
+        if 'error' in result:
+            sys.exit(1)
     
     else:
         print(f"Error: Unknown command '{command}'", file=sys.stderr)

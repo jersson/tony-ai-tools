@@ -1,5 +1,6 @@
 ---
 name: build-knowledge
+persona: none
 description: Full document pipeline that builds a vectorized second brain — converts raw sources (pdf, docx, xlsx, pptx, html, URLs) to markdown, quality-gates them, generates an Obsidian-compatible wiki with TF-IDF + vector indexes, and synthesizes a cited knowledge base (.tony/knowledge-base.md) used to support or push back on ideas.
 ---
 
@@ -10,7 +11,7 @@ When this skill is loaded, you run tony's **knowledge pipeline**: raw documents 
 - `.tony/` — converted documents, wiki, and retrieval indexes (TF-IDF + vector)
 - `.tony/knowledge-base.md` — the curated claims layer (citations + conflicts) used to support or challenge ideas
 
-> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`). Quote whichever form matches the developer's environment.
+> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`). Quote whichever form matches the PO's environment.
 
 ## Pre-condition
 
@@ -18,17 +19,23 @@ When this skill is loaded, you run tony's **knowledge pipeline**: raw documents 
 
 Read `../globals/INDEX.md` and load every principle file it lists into session context. Nothing else in this skill runs until that is done.
 
-### 2. Locate the tools
+### 2. Run persona-neutral (utility mode)
+
+`build-knowledge` is the evidence machinery, not an idea-shaping skill. Run every pipeline step **persona-neutral** — never apply a PO personality to conversions, quality gates, indexes, or knowledge-base synthesis. The facts artifacts cite must not be steered, or the downstream support / pushback mechanism becomes untrustworthy.
+
+It is also the **hard prerequisite** for the PO-mode skills: `create-epic` and `create-user-story` refuse to run until `.tony/knowledge-base.md` exists. This pipeline exists to produce that gate's artifact.
+
+### 3. Locate the tools
 
 The Python tools are vendored in the tony package under `tools/` — two directory levels up from this SKILL.md file (`<package_root>/tools/`). Resolve that path once and reuse it for every command below.
 
-Check whether Python 3.10+ is available (`python3 --version`). If `python3` is missing or older than 3.10 (e.g. macOS system Python 3.9), look for a newer interpreter (`python3.13`, `python3.12`, Homebrew python) and use it for every tool call below. If none exists, tell the developer to install Python 3.10+ and **stop** — the pipeline cannot run without it (markitdown requires ≥3.10; the other tools need ≥3.9).
+Check whether Python 3.10+ is available (`python3 --version`). If `python3` is missing or older than 3.10 (e.g. macOS system Python 3.9), look for a newer interpreter (`python3.13`, `python3.12`, Homebrew python) and use it for every tool call below. If none exists, tell the PO to arrange Python 3.10+ (or have their engineer do it) and **stop** — the pipeline cannot run without it (markitdown requires ≥3.10; the other tools need ≥3.9).
 
 ## Workflow
 
 ### 1. Determine intent
 
-If the developer wants to **use** an existing knowledge base to shape an idea, do not proceed here. Redirect to `/tony create-epic` or `/tony create-user-story` and stop.
+If the PO wants to **use** an existing knowledge base to shape an idea, do not proceed here. Redirect to `/tony create-epic` or `/tony create-user-story` and stop.
 
 If they want to **load documents** into the baseline, proceed.
 
@@ -37,7 +44,7 @@ If they want to **load documents** into the baseline, proceed.
 Resolve sources in this order:
 
 1. If `<project_root>/.tony/raw-documents/` exists and has files → use it.
-2. Otherwise accept file paths, folder paths, or URLs given by the developer; copy/move loose files into `.tony/raw-documents/` first.
+2. Otherwise accept file paths, folder paths, or URLs given by the PO; copy/move loose files into `.tony/raw-documents/` first.
 3. If nothing is available — the folder is missing **or empty** and nothing was given — do not run any pipeline step. Create `.tony/raw-documents/` if missing, apply the announcement below, and stop until documents appear or paths are provided.
 
 **First-time announcement:** whenever you create `.tony/raw-documents/`, say so explicitly: *"Created `.tony/raw-documents/` — that is tony's canonical drop point. Put source documents there and re-run `/tony build-knowledge`."*
@@ -50,7 +57,7 @@ Supported inputs: `.pdf`, `.doc`, `.docx`, `.xls`, `.xlsx`, `.pptx`, `.txt`, `.h
 python3 <package_root>/tools/convert.py <sources> <project_root>/.tony/md-documents/ --incremental
 ```
 
-The tool prints JSON: `success_rate`, `files[]`, `total`, `success`, `failed`. It writes YAML frontmatter (source, format, checksum) into each converted file and maintains `manifest.json`.
+The tool prints JSON to stdout. For a directory it reports the batch shape — `success_rate`, `files[]`, `total`, `success`, `failed` — and **exits 1 when `success_rate` drops below 75%** (hard stop; the load quality gate is step 4). A single file or URL reports one object: `status`, `source_file`, `original_format`, `checksum`, `date_loaded`. Every converted file gets YAML frontmatter (`source_file`, `original_format`, `date_loaded`, `checksum`; plus `source_url` for URL sources) and `manifest.json` is maintained.
 
 **Dependency check:** if markitdown is missing, the tool exits with an install hint. Offer to run `pip install -r <package_root>/tools/requirements.txt` — never install without approval.
 
