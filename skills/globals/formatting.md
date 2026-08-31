@@ -12,6 +12,7 @@ Match the PO's language for the entire exchange — prompts and responses, plus 
 - Chain of thought between prompts: the process narration the PO can read — `<plan>`, `<verification>`, and any progress/transition prose — is PO-facing, so write it in the PO's language. `<thought>` is the internal analysis; it stays in English (it is not shown as process text, and keeping it stable avoids model-quality drift when switching).
 - The report, its status line, and follow-up questions are PO-facing → in the PO's language.
 - Do not localize code, tool names, commands, file names, or the skill/artifact templates themselves — only human-facing prose.
+- **Keep technical terms and domain concepts untranslated.** Product-noun concepts and specialist vocabulary (evidence-driven, quality gate, knowledge base, INVEST, CI/CD, sprint scope, dependencies) are clearer in the language they were coined in. Translate the prose around them; leave the term itself intact. For example, keep "Evidence-driven" rather than transliterating it.
 - Ticket titles and artifact titles stay in the language of the conversation unless the PO specifies otherwise.
 
 ## No filler
