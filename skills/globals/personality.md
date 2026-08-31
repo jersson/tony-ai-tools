@@ -8,8 +8,11 @@ PO-mode skills load (or capture) the persona in their pre-condition. **Utility-m
 
 ## Load rule (ask once)
 
-1. If `<project_root>/.tony/personality.md` exists → read it into session context. Never re-ask.
-2. If it is missing → run the capture flow below, save the result to `<project_root>/.tony/personality.md`, then continue. Later runs load it silently.
+The saved personality is a **strict configuration file**, not free-form prose: `<project_root>/.tony/personality.json` (JSON/JSONC, comments allowed).
+
+1. If `<project_root>/.tony/personality.json` exists → load it, **validate it against the schema below**, then read it into session context. Never re-ask.
+2. Validation is a hard gate: if the file has an **unmapped key** (anything outside the allowed parameters), a missing required field, or an invalid enum/value — **do not proceed**. Throw a processing error telling the PO exactly which key is wrong and the allowed values, and stop until the file is fixed.
+3. If it is missing → run the capture flow below, save the result as `<project_root>/.tony/personality.json`, then continue. Later runs validate+load it silently.
 
 ## Capture flow (one compact pass)
 
@@ -26,20 +29,30 @@ Then the single customization line: the PO's preferred tone and one rule they al
 
 ## Saved profile format
 
-Write `<project_root>/.tony/personality.md`:
+Write `<project_root>/.tony/personality.json` (JSON/JSONC — `//` comments allowed). Only these configuration parameters are mapped; **no other keys are allowed**:
 
-```markdown
----
-archetype: <evidence-driven|speed-to-market|customer-vision|balanced>
-updated_at: <ISO timestamp>
----
+| Key | Type | Required | Allowed values |
+|-----|------|----------|----------------|
+| `archetype` | string | yes | `evidence-driven` \| `speed-to-market` \| `customer-vision` \| `balanced` |
+| `tone` | string | no | the PO's preferred tone (non-empty) |
+| `working_rule` | string | no | the PO's one working rule (non-empty) |
+| `updated_at` | string | yes | ISO-8601 timestamp |
 
-## Working rule
-<the PO's one rule>
-
-## Tone
-<the PO's preferred tone>
+```jsonc
+{
+  // allowed: config parameters only — no prose, no extra sections
+  "archetype": "speed-to-market",
+  "tone": "direct and concise",
+  "working_rule": "smallest slice that ships",
+  "updated_at": "2026-08-31T12:00:00.000Z"
+}
 ```
+
+On load, any top-level key outside the four above (e.g. an accidental `## Tone` section or a stray paragraph) is an **unmapped key error** — report it and stop. The config must never carry free-form text that the skills cannot interpret.
+
+## Legacy migration
+
+The personality was previously saved as free-form markdown at `<project_root>/.tony/personality.md`. If you find that file but not the `.json`, **treat it as the capture source**, not a config: read it, map `archetype` / `Tone` → `tone` / `## Working rule` → `working_rule`, write the result to `.tony/personality.json` in the strict schema, then delete or archive the `.md`. Never load the `.md` as if it were a config.
 
 ## Application
 

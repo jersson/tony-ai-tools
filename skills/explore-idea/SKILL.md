@@ -20,8 +20,8 @@ Read `../globals/INDEX.md` and load every principle file it lists into session c
 
 Apply the PO personality following `../globals/personality.md`:
 
-- If `<project_root>/.tony/personality.md` exists → load it into context. Never re-ask.
-- If it is missing → run the capture flow (one compact pass), save to `<project_root>/.tony/personality.md`, then continue.
+- If `<project_root>/.tony/personality.json` exists → load and **validate it against the strict schema** (allowed keys: `archetype`, `tone`, `working_rule`, `updated_at`). If it has an unmapped key, a missing required field, or an invalid archetype, **throw a processing error** naming the problem and stop — never proceed with an unparseable config. `node <package_root>/lib/personality.mjs`-style validation may be used, or validate by hand against the globals schema.
+- If it is missing → run the capture flow (one compact pass), save to `<project_root>/.tony/personality.json`, then continue.
 - If the PO's intent is only document-loading (`/tony build-knowledge`) and no profile exists yet → **defer the capture**; probe only once an idea is actually being shaped.
 
 ## Workflow
