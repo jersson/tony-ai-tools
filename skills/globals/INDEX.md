@@ -1,11 +1,13 @@
 # Operating Principles Index
 
-Read and cache every file in this directory before running any workflow step:
+Read and cache every principle file listed below before running any workflow step:
 
 - `efficiency.md` — context and token discipline
-- `formatting.md` — response structure, identity header, scannability
+- `formatting.md` — response structure, identity header, scannability, and language match (answer in the PO's language)
 - `safety.md` — verification, confirmation, and secrets handling
 - `precision.md` — scope matching and question protocol
+
+**Note:** `personality.md` (the instruction doc in this directory) is **not** a principle (it ranks below them). PO-mode skills load it on demand through their own pre-condition; utility-mode skills never load it. Do not treat it as part of the global load. The *saved projection* of the PO personality is a separate, validated config file written to `<project_root>/.tony/personality.json` (not markdown).
 
 The **project root** is the directory where opencode was launched (the workspace root). All `docs/` paths in skills are relative to this root.
 
