@@ -65,18 +65,18 @@ If essential context is missing, ask **one** focused clarifying question at a ti
 
 ### 4. Use the knowledge base
 
-The gate in the pre-conditions guarantees `.tony/knowledge-base.md` exists. Read it and use it two ways:
+Use the knowledge base — it is the context for shaping. It is never optional. Read `.tony/knowledge-base.md` and use it both ways:
 
 - **Support:** ground story details in cited claims — personas for the roles, baselines and targets for acceptance-criteria thresholds (e.g., a documented "links valid 12 months" decision becomes a testable criterion). Copy citations into the story's Notes / Context. Any claim that cannot be traced to the knowledge base must be listed under the story's **Assumptions** section and labeled as an assumption — never presented as fact (checklist: every claim is cited or an assumption).
 - **Push back:** when a drafted story contradicts the baseline — a constraint it violates, a metric it undermines, a conflict already recorded — flag it with both citations before writing. The PO decides whether to adjust the story or override the baseline; never silently write a story that contradicts the knowledge base.
 
-**Deep evidence lookup (optional):** if `.tony/index/kb.db` exists and acceptance criteria need thresholds or details not in the distilled claims, run a semantic search over the full corpus:
+**Deep evidence lookup (required):** the distilled claims in the knowledge base are the minimum, not the ceiling. Run a semantic search over the full corpus so acceptance criteria and details are grounded in the complete context, not just the summary, whenever `.tony/index/kb.db` exists:
 
 ```bash
 python3 <package_root>/tools/vector_index.py search .tony/index/kb.db "<query>" 5
 ```
 
-Cite what it returns; fall back to TF-IDF (`<package_root>/tools/index.py search`) when the vector index is unavailable.
+Cite what it returns; fall back to TF-IDF (`<package_root>/tools/index.py search`) when the vector index is unavailable. Shaping is done against the full loaded corpus — there is no lighter, context-free mode.
 
 ### 5. Identify candidate stories
 

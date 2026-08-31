@@ -57,18 +57,18 @@ If the idea is too vague to extract at least problem + users + outcome, ask **on
 
 ### 3. Use the knowledge base
 
-The gate in the pre-conditions guarantees `.tony/knowledge-base.md` exists. Read it and use it two ways:
+Use the knowledge base — it is the context for shaping. It is never optional. Read `.tony/knowledge-base.md` and use it both ways:
 
 - **Support:** anchor the epic's problem, users, and goals to cited claims (e.g., a success metric that matches a documented baseline). Copy the citations into the epic's Assumptions or Success Metrics.
 - **Push back:** when the idea contradicts the baseline — a constraint it ignores, a metric it conflicts with, a decision already taken — say so explicitly with both citations before writing anything. The PO decides whether to adjust the idea or override the baseline; never silently write an epic that contradicts the knowledge base.
 
-**Deep evidence lookup (optional):** if `.tony/index/kb.db` exists and the distilled claims don't cover something, run a semantic search over the full corpus:
+**Deep evidence lookup (required):** the distilled claims in the knowledge base are the minimum, not the ceiling. Run a semantic search over the full corpus so the epic is grounded in the complete context, not just the summary, whenever `.tony/index/kb.db` exists:
 
 ```bash
 python3 <package_root>/tools/vector_index.py search .tony/index/kb.db "<query>" 5
 ```
 
-Cite what it returns; fall back to TF-IDF (`<package_root>/tools/index.py search`) when the vector index is unavailable.
+Cite what it returns; fall back to TF-IDF (`<package_root>/tools/index.py search`) when the vector index is unavailable. Shaping is done against the full loaded corpus — there is no lighter, context-free mode.
 
 ### 4. Check existing context
 
