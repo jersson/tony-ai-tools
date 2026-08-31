@@ -38,3 +38,7 @@
 
 - File name: kebab-case of the epic title (e.g., `referral-program.md`)
 - Location: `<project_root>/docs/epics/`
+
+## Example
+
+See a complete, filled-in example at `./example.md` (same folder).
