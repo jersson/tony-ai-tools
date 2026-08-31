@@ -14,35 +14,53 @@
 - **Epics** — outcome-oriented bodies of work with clear scope and success metrics
 - **User stories** — validated with [INVEST](https://en.wikipedia.org/wiki/INVEST_(mnemonic)) and [3C](https://ronjeffries.com/xprog/articles/expcardconversationconfirmation/) practices before they ever reach your backlog
 
-Load your reference documents (PRDs, research, strategy docs, PDFs, spreadsheets, URLs) as an evidence baseline: `build-knowledge` converts them to markdown, builds an Obsidian-compatible wiki with **TF-IDF + vector search indexes**, and synthesizes a cited knowledge base. Epics and stories are then **supported** by cited facts — or **pushed back** when they contradict what your documents say.
+Load your reference documents (PRDs, research, strategy docs, PDFs, spreadsheets, URLs) as an evidence baseline: `build-knowledge` converts them to markdown, builds an Obsidian-compatible wiki with **TF-IDF + vector search indexes** — a file-based vector store built on **SQLite + the `sqlite-vec` extension, with local embeddings via `fastembed`** (see `tools/vector_index.py`) — and synthesizes a cited knowledge base. Epics and stories are then **supported** by cited facts — or **pushed back** when they contradict what your documents say.
 
-> Have an idea? Run `tony`, describe it, and get backlog-ready epics and stories.
+> Have an idea? Load your evidence first with `/tony build-knowledge`, then describe the idea and get backlog-ready epics and stories.
 
 Run `tony` with no arguments at any time to see the command list.
 
 ## Available skills
 
-- **explore-idea** — entry point: loads global guidelines, checks your knowledge base state, captures your idea with a quick evidence pass (supporting claims and contradictions), and routes to the right skill
-- **build-knowledge** — full document pipeline: converts sources, quality-gates them, builds a wiki + retrieval indexes (TF-IDF and vector), and synthesizes the knowledge base (`.tony/knowledge-base.md`)
-- **create-epic** — understands an idea and shapes it into one or more well-formed epics (`docs/epics/`), grounded in the knowledge base when one is loaded
-- **create-user-story** — breaks an idea or epic into user stories, each self-validated against INVEST + 3C before it is written (`docs/user-stories/`)
+Skills fall into one of two modes: **PO mode** — they act on your behalf as a product owner, applying your saved PO personality — and **utility mode** — persona-neutral machinery. `build-knowledge` is a **hard prerequisite** for PO mode: `create-epic` and `create-user-story` refuse to run until a knowledge base exists, so every artifact stays grounded in cited facts.
+
+- **explore-idea** *(PO mode)* — entry point: loads global guidelines, checks your knowledge base state, captures your idea with a quick evidence pass (supporting claims and contradictions), and routes to the right skill
+- **build-knowledge** *(utility, persona-neutral)* — full document pipeline: converts sources, quality-gates them, builds a wiki + retrieval indexes (TF-IDF and vector), and synthesizes the knowledge base (`.tony/knowledge-base.md`)
+- **create-epic** *(PO mode)* — understands an idea and shapes it into one or more well-formed epics (`docs/epics/`), grounded in the loaded knowledge base
+- **create-user-story** *(PO mode)* — breaks an idea or epic into user stories, each self-validated against INVEST + 3C before it is written (`docs/user-stories/<epic-name>/`)
+
+See [`examples/`](examples/) for sample artifacts shipped with tony (reference only — never created in your project): an [epic](examples/epics/referral-program.md) and two [user stories](examples/user-stories/referral-program/referral-share-link.md) grouped in a per-epic folder.
 
 Every generated user story respects the INVEST + 3C validation rules: one role, one action, one benefit; acceptance criteria that are objectively pass/fail; no hidden assumptions; nothing that can't fit in a sprint.
 
-See [`examples/`](examples/) for sample artifacts shipped with tony (reference only — never created in your project): an [epic](examples/epics/referral-program.md) and two [user stories](examples/user-stories/referral-share-link.md) generated from it.
-
 ## Typical workflow
 
-```
-explore-idea          build-knowledge           create-epic            create-user-story
-     │                     │                        │                        │
-  capture idea  ──►  raw docs → wiki →      idea ──► validated       epic/idea ──► INVEST+3C
-  + evidence check    vector indexes          epics (cited)            user stories
-                      + cited KB              (pushback if             (registry +
-                                              contradicted)            citations)
+```mermaid
+flowchart LR
+    subgraph Utility["utility — persona-neutral"]
+        direction TB
+        BK["build-knowledge"]
+    end
+
+    subgraph PO["PO mode"]
+        direction TB
+        EI["explore-idea"]
+        CE["create-epic"]
+        CUS["create-user-story"]
+    end
+
+    KB["📄 .tony/knowledge-base.md"]
+
+    EI -->|"load documents"| BK
+    BK --> KB
+    EI -->|"shape an epic"| CE
+    EI -->|"break into stories"| CUS
+    CE -->|"break down"| CUS
+    KB == "hard gate" ==> CE
+    KB == "hard gate" ==> CUS
 ```
 
-Each step is independent — start wherever you are: have documents? Run `build-knowledge` first. Already know the epic? Go straight to `create-user-story`.
+Shaping skills are gated on the evidence layer, not on each other: `build-knowledge` runs first (it produces the knowledge base); once `.tony/knowledge-base.md` exists, start your shaping wherever you are — already know the epic? Go straight to `create-user-story`.
 
 ## Operating principles
 
@@ -59,11 +77,12 @@ Every skill runs under four rules:
 - Node.js >= 18
 - [OpenCode](https://opencode.ai) and/or [Claude Code](https://claude.com/claude-code) — the Claude Code installer shells out to the `claude` CLI, so it must be on your `PATH`
 - Local folder where generated artifacts live, by default `tony` writes to the `docs` folder
-- Python 3.10+ + pip packages for the document pipeline (optional, only for `/tony build-knowledge`):
+- Python 3.10+ + pip packages — required for `/tony build-knowledge`, which is a hard prerequisite for PO shaping (epics and stories):
   ```bash
   pip install -r tools/requirements.txt   # markitdown, numpy, fastembed, sqlite-vec
   ```
-  Without them, epics and stories still work — only the knowledge pipeline is unavailable. See [`tools/README.md`](tools/README.md) for details on the vendored tools.
+  Note: vector search runs fully local — `fastembed` produces embeddings and `sqlite-vec` stores/retrieves them inside `kb.db`; nothing leaves your machine.
+  Without the document pipeline you cannot build the knowledge base, so `create-epic` and `create-user-story` refuse to run. See [`tools/README.md`](tools/README.md) for details on the vendored tools.
 
 ## Installation
 
@@ -77,15 +96,15 @@ npm install -g @my-tony/ai-tools
 <project_root>/
 ├── docs/
 │   ├── epics/                   # epic files generated by create-epic
-│   └── user-stories/            # user story files generated by create-user-story
+│   └── user-stories/            # one folder per epic; story files generated by create-user-story
 └── .tony/
     ├── knowledge-base.md        # cited claims + conflicts (synthesized from the wiki)
+    ├── personality.json        # captured PO personality config (validated params, see "Product owner personality")
     ├── .story-registry.json     # create-user-story generation results
     ├── raw-documents/           # drop source files here (pdf, docx, xlsx, pptx, html, txt)
     ├── md-documents/            # converted markdown sources + manifest.json
     ├── wiki/                    # Obsidian-compatible wiki (MOC + category pages)
-    ├── index/                   # TF-IDF store + kb.db (vector store)
-    └── reports/                 # pipeline quality reports
+    └── index/                   # TF-IDF store + kb.db (SQLite + sqlite-vec vector store)
 ```
 
 ### OpenCode
