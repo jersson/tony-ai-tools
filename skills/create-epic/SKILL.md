@@ -28,7 +28,7 @@ Apply the PO personality following `../globals/personality.md`:
 `build-knowledge` is a hard prerequisite — this skill cannot shape a grounded epic without it.
 
 - If `<project_root>/.tony/knowledge-base.md` exists → proceed.
-- If it is missing → do not run this skill. Tell the PO: *"Shaping requires a knowledge base. Run `/tony build-knowledge` first — drop source documents in `.tony/raw-documents/`."* Stop.
+- If it is missing → do not run this skill, and do not offer any way to continue without the baseline. There is no "no-baseline" path — never propose to register the idea as unverified, proceed anyway, or mark every claim unverified. Tell the PO: *"Shaping requires a knowledge base. Run `/tony build-knowledge` first — drop source documents in `.tony/raw-documents/`."* Stop.
 
 ## Workflow
 
