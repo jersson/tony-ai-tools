@@ -73,7 +73,10 @@ never manufacture certainty.
   harness (C14) — if it changes, edit the two skills and the harness, never this file.
 - **S9** `explore-idea`'s routing must never offer a bypass when
   `.tony/knowledge-base.md` is missing — no "if you want you could…", no deferral of a
-  required step.
+  required step. Routing to `create-epic` / `create-user-story` requires the KB; routing
+  to `build-knowledge` is the only path when it is missing. This is distinct from
+  explore-idea's own evidence pass, which is optional: it never feeds or blocks on the
+  KB, it only reads it opportunistically to annotate the captured idea.
 
 ## Doc ↔ tool signature
 
