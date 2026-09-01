@@ -43,11 +43,11 @@ If the PO shares an idea (a sentence, a paragraph, a document), capture it:
 1. Read what they pasted or referenced (file paths are read from the project).
 2. Extract in one pass: **problem/goal**, **target users**, **expected outcome**, **scope hints**, **unknowns**.
 3. If anything essential is missing or contradictory, ask **one** focused clarifying question — never multiple.
-4. **Evidence pass:** if `<project_root>/.tony/knowledge-base.md` exists, read its Summary and Conflicts sections and check the captured idea against them. Note which claims support it (with citations) and flag any contradiction — one line each, full analysis stays with create-epic / create-user-story.
+ 4. **Evidence pass:** the knowledge base is optional at this stage. If `<project_root>/.tony/knowledge-base.md` exists, read its Summary and Conflicts sections and check the captured idea against them. Note which claims support it (with citations) and flag any contradiction — one line each, full analysis stays with create-epic / create-user-story. If it does not exist, capture the idea anyway — explore-idea only needs the idea, not the full context.
 
 ### 3. Recommend a path
 
-Check whether `<project_root>/.tony/knowledge-base.md` exists — it is now a hard prerequisite: `create-epic` and `create-user-story` refuse to run without it, because every artifact must be grounded in cited facts.
+Check whether `<project_root>/.tony/knowledge-base.md` exists. It is optional for explore-idea itself — capturing and clarifying the idea does not require the full context. But it is a hard prerequisite for the skills this skill routes to: `create-epic` and `create-user-story` refuse to run without it, because every artifact must be grounded in cited facts.
 
 Based on the idea's size and shape:
 
