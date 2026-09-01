@@ -22,9 +22,9 @@ Run `tony` with no arguments at any time to see the command list.
 
 ## Available skills
 
-Skills fall into one of two modes: **PO mode** — they act on your behalf as a product owner, applying your saved PO personality — and **utility mode** — persona-neutral machinery. `build-knowledge` is a **hard prerequisite** for PO mode: `create-epic` and `create-user-story` refuse to run until a knowledge base exists, so every artifact stays grounded in cited facts.
+Skills fall into one of two modes: **PO mode** — they act on your behalf as a product owner, applying your saved PO personality — and **utility mode** — persona-neutral machinery. `build-knowledge` is a **hard prerequisite for the shaping skills only**: `create-epic` and `create-user-story` refuse to run until a knowledge base exists, so every artifact stays grounded in cited facts. `explore-idea`, the entry point, only needs the idea — it uses the knowledge base opportunistically if one is present.
 
-- **explore-idea** *(PO mode)* — entry point: loads global guidelines, checks your knowledge base state, captures your idea with a quick evidence pass (supporting claims and contradictions), and routes to the right skill
+- **explore-idea** *(PO mode)* — entry point: loads global guidelines, captures and clarifies the idea, runs an opportunistic evidence pass (supporting claims and contradictions) when a knowledge base is present, and routes to the right skill
 - **build-knowledge** *(utility, persona-neutral)* — full document pipeline: converts sources, quality-gates them, builds a wiki + retrieval indexes (TF-IDF and vector), and synthesizes the knowledge base (`.tony/knowledge-base.md`)
 - **create-epic** *(PO mode)* — understands an idea and shapes it into one or more well-formed epics (`docs/epics/`), grounded in the loaded knowledge base
 - **create-user-story** *(PO mode)* — breaks an idea or epic into user stories, each self-validated against INVEST + 3C before it is written (`docs/user-stories/<epic-name>/`)
