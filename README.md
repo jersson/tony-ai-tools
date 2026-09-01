@@ -51,16 +51,16 @@ flowchart LR
 
     KB["📄 .tony/knowledge-base.md"]
 
-    EI -->|"load documents"| BK
     BK --> KB
-    EI -->|"shape an epic"| CE
-    EI -->|"break into stories"| CUS
+    EI -.->|"routes the PO to"| BK
+    EI -.->|"routes the PO to (KB required)"| CE
+    EI -.->|"routes the PO to (KB required)"| CUS
     CE -->|"break down"| CUS
     KB == "hard gate" ==> CE
     KB == "hard gate" ==> CUS
 ```
 
-Shaping skills are gated on the evidence layer, not on each other: `build-knowledge` runs first (it produces the knowledge base); once `.tony/knowledge-base.md` exists, start your shaping wherever you are — already know the epic? Go straight to `create-user-story`.
+Shaping skills are gated on the evidence layer, not on each other: `build-knowledge` runs first (it produces the knowledge base); once `.tony/knowledge-base.md` exists, start your shaping wherever you are — already know the epic? Go straight to `create-user-story`. `explore-idea` is only the entry point: it captures the idea and **routes the PO** to the right command — it does not load documents or shape anything itself. It can direct the PO to `build-knowledge` when no baseline exists yet, but it never feeds the knowledge base.
 
 ## Operating principles
 
