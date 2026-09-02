@@ -84,6 +84,10 @@ Every skill runs under four rules:
   Note: vector search runs fully local — `fastembed` produces embeddings and `sqlite-vec` stores/retrieves them inside `kb.db`; nothing leaves your machine.
   Without the document pipeline you cannot build the knowledge base, so `create-epic` and `create-user-story` refuse to run. See [`tools/README.md`](tools/README.md) for details on the vendored tools.
 
+## Product owner personality
+
+PO-mode skills act with a captured PO personality, stored as a validated config at `.tony/personality.json`. It is **captured from option lists, never written by the PO** — the first PO-mode run asks the PO to pick one **archetype** (`evidence-driven` \| `speed-to-market` \| `customer-vision` \| `balanced`), one **tone** (`direct` \| `warm` \| `concise` \| `formal` \| `approachable`), and one **working rule** (`evidence-first` \| `ship-fast` \| `user-centered` \| `balanced`), then saves the selection. Values outside these presets are rejected as a processing error; the PO is never asked to type configuration.
+
 ## Installation
 
 ```bash

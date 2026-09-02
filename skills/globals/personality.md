@@ -16,7 +16,15 @@ The saved personality is a **strict configuration file**, not free-form prose: `
 
 ## Capture flow (one compact pass)
 
-Ask the PO to pick one archetype and give one working rule:
+The PO **selects values from preset option lists** — they never write the configuration. Ask them to pick **one archetype**, **one tone**, and **one working rule** from the lists below:
+
+| Preset | Options |
+|--------|---------|
+| **Archetype** (required) | `evidence-driven` \| `speed-to-market` \| `customer-vision` \| `balanced` |
+| **Tone** | `direct` \| `warm` \| `concise` \| `formal` \| `approachable` |
+| **Working rule** | `evidence-first` \| `ship-fast` \| `user-centered` \| `balanced` |
+
+Archetype voices (to help the PO choose):
 
 | Archetype | Voice |
 |-----------|-------|
@@ -25,25 +33,25 @@ Ask the PO to pick one archetype and give one working rule:
 | Customer-vision | Centers end-user experience; weighs friction, delight, and empathy in story detail and acceptance criteria |
 | Balanced | Weighs evidence, speed, and customer impact evenly; asks the one clarifying question whenever evidence is thin |
 
-Then the single customization line: the PO's preferred tone and one rule they always work by. Keep it to one compact exchange — precision (one question at a time) wins over thoroughness.
+Keep it to one compact exchange — precision (one question at a time) wins over thoroughness. Collect all three selections in a single pass, then write the file. The user never types a `tone` or `working_rule` value; they only pick from the lists.
 
 ## Saved profile format
 
-Write `<project_root>/.tony/personality.json` (JSON/JSONC — `//` comments allowed). Only these configuration parameters are mapped; **no other keys are allowed**:
+Write `<project_root>/.tony/personality.json` (JSON/JSONC — `//` comments allowed). Only these configuration parameters are mapped; **no other keys are allowed**, and each maps to a preset value:
 
 | Key | Type | Required | Allowed values |
 |-----|------|----------|----------------|
 | `archetype` | string | yes | `evidence-driven` \| `speed-to-market` \| `customer-vision` \| `balanced` |
-| `tone` | string | no | the PO's preferred tone (non-empty) |
-| `working_rule` | string | no | the PO's one working rule (non-empty) |
+| `tone` | string | yes | `direct` \| `warm` \| `concise` \| `formal` \| `approachable` |
+| `working_rule` | string | yes | `evidence-first` \| `ship-fast` \| `user-centered` \| `balanced` |
 | `updated_at` | string | yes | ISO-8601 timestamp |
 
 ```jsonc
 {
-  // allowed: config parameters only — no prose, no extra sections
+  // allowed: preset config parameters only — no prose, no extra sections
   "archetype": "speed-to-market",
-  "tone": "direct and concise",
-  "working_rule": "smallest slice that ships",
+  "tone": "concise",
+  "working_rule": "ship-fast",
   "updated_at": "2026-08-31T12:00:00.000Z"
 }
 ```
@@ -52,7 +60,7 @@ On load, any top-level key outside the four above (e.g. an accidental `## Tone` 
 
 ## Legacy migration
 
-The personality was previously saved as free-form markdown at `<project_root>/.tony/personality.md`. If you find that file but not the `.json`, **treat it as the capture source**, not a config: read it, map `archetype` / `Tone` → `tone` / `## Working rule` → `working_rule`, write the result to `.tony/personality.json` in the strict schema, then delete or archive the `.md`. Never load the `.md` as if it were a config.
+The personality was previously saved as free-form markdown at `<project_root>/.tony/personality.md`. If you find that file but not the `.json`, **treat it as the capture source**, not a config: read it, map `archetype` directly, and map any free-form `Tone` / `## Working rule` to the **closest preset** from the option lists above (semantic match — never copy the raw text, since only preset values are valid). Write the result to `.tony/personality.json` in the strict schema, then delete or archive the `.md`. Never load the `.md` as if it were a config.
 
 ## Application
 

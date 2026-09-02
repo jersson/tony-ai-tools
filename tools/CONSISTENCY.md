@@ -101,6 +101,11 @@ never manufacture certainty.
   - frontmatter `persona:` of a skill ↔ whether it loads personality.md
   When adding or renaming an archetype, update the headings (harness-verified, C17),
   the fingerprints, and every load rule in the same change.
+- **S21** The personality config is **option-list only** — the capture flow has the PO
+  pick `archetype`, `tone`, and `working_rule` from preset lists; the PO never writes
+  the config. Every value maps to a preset (archetype, tone, working_rule enums in
+  `lib/personality.mjs` are the source of truth), and the saved profile requires all
+  four keys. Legacy free-form migration maps to the closest preset, never raw text.
 
 ## Version & package identity
 
