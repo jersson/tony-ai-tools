@@ -29,8 +29,6 @@ Skills fall into one of two modes: **PO mode** — they act on your behalf as a 
 - **create-epic** *(PO mode)* — understands an idea and shapes it into one or more well-formed epics (`docs/epics/`), grounded in the loaded knowledge base
 - **create-user-story** *(PO mode)* — breaks an idea or epic into user stories, each self-validated against INVEST + 3C before it is written (`docs/user-stories/<epic-name>/`)
 
-See [`examples/`](examples/) for sample artifacts shipped with tony (reference only — never created in your project): an [epic](examples/epics/referral-program.md) and two [user stories](examples/user-stories/referral-program/referral-share-link.md) grouped in a per-epic folder.
-
 Every generated user story respects the INVEST + 3C validation rules: one role, one action, one benefit; acceptance criteria that are objectively pass/fail; no hidden assumptions; nothing that can't fit in a sprint.
 
 ## Typical workflow

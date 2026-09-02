@@ -84,13 +84,6 @@ never manufacture certainty.
   documentation (exact flags, argument order, `[k]` optional markers) and must use the
   compact CLI form the PO would actually type. Examples must be runnable as printed.
 
-## Template ↔ instance fidelity
-
-- **S11** A filled example (epic/story/archetype) must cover **every** section of the
-  template it is paired with. A missing template section in the example is a defect.
-- **S12** A filled example must be a valid instance of the checklist it accompanies —
-  run each shipped example through its checklist item by item.
-
 ## Archetype personality
 
 - **S13** `personality.md` is **not** a principle: it ranks below the four principles
