@@ -43,9 +43,27 @@ If the PO shares an idea (a sentence, a paragraph, a document), capture it:
 1. Read what they pasted or referenced (file paths are read from the project).
 2. Extract in one pass: **problem/goal**, **target users**, **expected outcome**, **scope hints**, **unknowns**.
 3. If anything essential is missing or contradictory, ask **one** focused clarifying question — never multiple.
- 4. **Evidence pass:** the knowledge base is optional at this stage. If `<project_root>/.tony/knowledge-base.md` exists, read its Summary and Conflicts sections and check the captured idea against them. Note which claims support it (with citations) and flag any contradiction — one line each, full analysis stays with create-epic / create-user-story. If it does not exist, capture the idea anyway — explore-idea only needs the idea, not the full context.
+4. **Evidence pass:** the knowledge base is optional at this stage. If `<project_root>/.tony/knowledge-base.md` exists, read its Summary and Conflicts sections and check the captured idea against them. Note which claims support it (with citations) and flag any contradiction — one line each, full analysis stays with create-epic / create-user-story. If it does not exist, capture the idea anyway — explore-idea only needs the idea, not the full context.
 
-### 3. Recommend a path
+### 3. Save the idea
+
+Persist the captured idea — never shape from a transient chat message. Ask the PO before writing anything; until they confirm, only the proposal (step 4) is on the table.
+
+1. Propose a kebab-case file name from the idea's essence (e.g., `referral-program.md`).
+2. On confirmation, write the captured idea to `<project_root>/docs/ideas/<kebab-name>.md` with sections: **Problem / Goal**, **Target users**, **Expected outcome**, **Scope hints**, **Unknowns**, and **Evidence pass** (supporting claims with citations and any contradiction flagged; `none — captured without a baseline` if the KB was absent).
+3. Keep it at the idea level — no solution design, no story detail (that belongs to create-epic / create-user-story).
+
+### 4. Propose before executing
+
+Present a concrete proposal and get the PO's confirmation **before** running/creating anything (shaping, further files, or redirecting to a shaping skill):
+
+- The saved idea file path and a one-line summary.
+- The evidence-pass findings, if any.
+- The recommended path from the table below and what it will produce and where (e.g., `create-epic` → `docs/epics/<name>.md`).
+
+Then ask the PO to confirm or adjust. Do not execute the recommendation until they do. If no KB exists and the recommendation is a shaping skill, also state that `build-knowledge` must run first (see table) and fold it into the proposal.
+
+### 5. Recommend a path
 
 Check whether `<project_root>/.tony/knowledge-base.md` exists. It is optional for explore-idea itself — capturing and clarifying the idea does not require the full context. But it is a hard prerequisite for the skills this skill routes to: `create-epic` and `create-user-story` refuse to run without it, because every artifact must be grounded in cited facts.
 
@@ -60,7 +78,7 @@ Based on the idea's size and shape:
 
 Present the recommendation with the captured summary (and evidence-pass findings, if any) so the PO can confirm.
 
-### 4. Announce readiness
+### 6. Announce readiness
 
 When no specific intent is detected and no idea was shared, check the baseline state first:
 
