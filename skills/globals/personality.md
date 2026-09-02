@@ -16,13 +16,15 @@ The saved personality is a **strict configuration file**, not free-form prose: `
 
 ## Capture flow (one compact pass)
 
-The PO **selects values from preset option lists** — they never write the configuration. Ask them to pick **one archetype**, **one tone**, and **one working rule** from the lists below:
+The PO **only selects** — they never type or write the configuration. Present each preset as a **selectable option list** using the environment's native choice picker (e.g. opencode's option/choice selection, the PO picks the entry — not a markdown table they read and type from). Show the PO one picker per field:
 
-| Preset | Options |
-|--------|---------|
+| Pick | Options |
+|------|---------|
 | **Archetype** (required) | `evidence-driven` \| `speed-to-market` \| `customer-vision` \| `balanced` |
 | **Tone** | `direct` \| `warm` \| `concise` \| `formal` \| `approachable` |
 | **Working rule** | `evidence-first` \| `ship-fast` \| `user-centered` \| `balanced` |
+
+Each option is a one-click/tap selection — the PO picks it, they do **not** type the value. Wait for the selection, then move to the next field. Optional: annotate the archetype options with their voice (below) so the PO chooses informed by meaning.
 
 Archetype voices (to help the PO choose):
 
@@ -33,7 +35,7 @@ Archetype voices (to help the PO choose):
 | Customer-vision | Centers end-user experience; weighs friction, delight, and empathy in story detail and acceptance criteria |
 | Balanced | Weighs evidence, speed, and customer impact evenly; asks the one clarifying question whenever evidence is thin |
 
-Keep it to one compact exchange — precision (one question at a time) wins over thoroughness. Collect all three selections in a single pass, then write the file. The user never types a `tone` or `working_rule` value; they only pick from the lists.
+Keep it to one compact pass — three consecutive pickers (archetype → tone → working rule), one selection each; precision (one question at a time) wins over thoroughness. The PO **never types** any value; they only select. Write the file from the three selections.
 
 ## Saved profile format
 

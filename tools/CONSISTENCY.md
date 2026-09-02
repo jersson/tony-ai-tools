@@ -102,7 +102,8 @@ never manufacture certainty.
   When adding or renaming an archetype, update the headings (harness-verified, C17),
   the fingerprints, and every load rule in the same change.
 - **S21** The personality config is **option-list only** — the capture flow has the PO
-  pick `archetype`, `tone`, and `working_rule` from preset lists; the PO never writes
+  pick `archetype`, `tone`, and `working_rule` from preset lists via the environment's
+  **native selectable picker** (one-click/tap selection); the PO never types or writes
   the config. Every value maps to a preset (archetype, tone, working_rule enums in
   `lib/personality.mjs` are the source of truth), and the saved profile requires all
   four keys. Legacy free-form migration maps to the closest preset, never raw text.
