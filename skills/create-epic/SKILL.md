@@ -1,6 +1,7 @@
 ---
 name: create-epic
-persona: po
+metadata:
+  persona: po
 description: Understand an idea and shape it into one or more well-formed epics, grounded in the loaded project knowledge base. Reads a pasted idea or referenced material, analyzes problem/actors/outcome, validates against the epic checklist, and writes the epic file(s) to docs/epics/.
 ---
 
@@ -8,7 +9,7 @@ description: Understand an idea and shape it into one or more well-formed epics,
 
 When this skill is loaded, you help the PO turn an idea into one or more **epics** — outcome-oriented bodies of work that will later be broken into user stories.
 
-> **Command syntax:** tony commands are written here as `/tony <name>`. In OpenCode use them as-is (e.g., `/tony create-user-story`); in Claude Code they are namespaced with a colon (e.g., `/tony:create-user-story`). Always show the PO the syntax that matches the current environment.
+> **Command syntax:** tony commands are written here as `/tony <name>`. In OpenCode use them as-is (e.g., `/tony create-user-story`); in Claude Code they are namespaced with a colon (e.g., `/tony:create-user-story`); in Copilot use the skill name directly (e.g., `/create-user-story`). Always show the PO the syntax that matches the current environment.
 
 ## Pre-condition
 

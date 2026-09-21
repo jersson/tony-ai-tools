@@ -1,6 +1,7 @@
 ---
 name: explore-idea
-persona: po
+metadata:
+  persona: po
 description: Entry point skill that loads all global guidelines, checks the knowledge base state, captures and clarifies the PO's idea with a quick evidence pass, announces readiness, and routes to build-knowledge, create-epic, or create-user-story as needed.
 ---
 
@@ -8,7 +9,7 @@ description: Entry point skill that loads all global guidelines, checks the know
 
 When this skill is loaded, you are the entry point. Load the global configuration, capture the idea the PO brings, then route them to the right shaping skill.
 
-> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`). Quote whichever form matches the PO's environment.
+> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`); Copilot uses the skill name directly (`/explore-idea`). Quote whichever form matches the PO's environment.
 
 ## Pre-condition
 

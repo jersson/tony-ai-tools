@@ -73,7 +73,7 @@ Every skill runs under four rules:
 ## Requirements
 
 - Node.js >= 18
-- [OpenCode](https://opencode.ai) and/or [Claude Code](https://claude.com/claude-code) — the Claude Code installer shells out to the `claude` CLI, so it must be on your `PATH`
+- [OpenCode](https://opencode.ai), [Claude Code](https://claude.com/claude-code), and/or [GitHub Copilot CLI](https://github.com/github/copilot-cli) — the Claude Code installer shells out to the `claude` CLI, so it must be on your `PATH`
 - Local folder where generated artifacts live, by default `tony` writes to the `docs` folder
 - Python 3.10+ + pip packages — required for `/tony build-knowledge`, which is a hard prerequisite for PO shaping (epics and stories):
   ```bash
@@ -157,15 +157,35 @@ claude plugin marketplace add jersson/tony-ai-tools
 claude plugin install tony@tony-ai-tools
 ```
 
+### GitHub Copilot CLI
+
+```bash
+cd my-project
+tony install --copilot             # project level (current directory)
+tony install --copilot --global   # user level (all projects)
+```
+
+The project installer creates `.github/skills/tony` as a link to the package's
+skills directory. The global installer creates `~/.copilot/skills/tony`, which
+makes the skills available across projects. Existing non-Tony paths are never
+overwritten.
+
+Restart Copilot CLI or run `/skills reload` after installation. The skills are
+invoked by their individual names: `/explore-idea`, `/build-knowledge`,
+`/create-epic`, and `/create-user-story`. Copilot also supports managing skills
+with `copilot skill list`.
+
 ## Uninstall
 
 ```bash
 tony uninstall --opencode                # repository level (current directory)
 tony uninstall --claude-code             # repository level (current directory)
 tony uninstall --claude-code --global    # global (user scope)
+tony uninstall --copilot                # project level (current directory)
+tony uninstall --copilot --global       # user level (all projects)
 ```
 
-The Claude Code variant uninstalls the plugin, removes the marketplace registration, and cleans up legacy installs.
+The Claude Code variant uninstalls the plugin, removes the marketplace registration, and cleans up legacy installs. The Copilot variant removes only the Tony-managed skills link.
 
 ## Version
 
