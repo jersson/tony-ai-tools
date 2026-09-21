@@ -1,6 +1,7 @@
 ---
 name: create-user-story
-persona: po
+metadata:
+  persona: po
 description: Understand an idea (or an existing epic) and draft user stories that pass INVEST + 3C validation, grounded in the loaded project knowledge base. Each story is self-checked against the checklist and correctness criteria before being written to docs/user-stories/<epic-name>/.
 ---
 
@@ -8,7 +9,7 @@ description: Understand an idea (or an existing epic) and draft user stories tha
 
 When this skill is loaded, you help the PO turn an idea (or an epic) into **user stories**. Every generated story must pass the INVEST + 3C validation rules before it is written to disk — a story that would fail `/tony` review does not leave this skill.
 
-> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`). Quote whichever form matches the PO's environment.
+> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`); Copilot uses the skill name directly (`/create-user-story`). Quote whichever form matches the PO's environment.
 
 ## Pre-condition
 

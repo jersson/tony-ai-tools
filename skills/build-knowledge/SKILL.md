@@ -1,6 +1,7 @@
 ---
 name: build-knowledge
-persona: none
+metadata:
+  persona: none
 description: Full document pipeline that builds a vectorized second brain — converts raw sources (pdf, docx, xlsx, pptx, html, URLs) to markdown, quality-gates them, generates an Obsidian-compatible wiki with TF-IDF + vector indexes, and synthesizes a cited knowledge base (.tony/knowledge-base.md) used to support or push back on ideas.
 ---
 
@@ -11,7 +12,7 @@ When this skill is loaded, you run tony's **knowledge pipeline**: raw documents 
 - `.tony/` — converted documents, wiki, and retrieval indexes (TF-IDF + vector)
 - `.tony/knowledge-base.md` — the curated claims layer (citations + conflicts) used to support or challenge ideas
 
-> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`). Quote whichever form matches the PO's environment.
+> **Command syntax:** examples below use `/tony <name>`. OpenCode runs them as written; Claude Code namespaces them with a colon (`/tony:create-epic`); Copilot uses the skill name directly (`/build-knowledge`). Quote whichever form matches the PO's environment.
 
 ## Pre-condition
 
