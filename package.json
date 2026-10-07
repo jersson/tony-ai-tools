@@ -1,6 +1,6 @@
 {
   "name": "@my-tony/ai-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Skill library to turn ideas into epics and user stories (INVEST + 3C)",
   "license": "MIT",
